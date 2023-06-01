@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HotelListingAPI.Data.Configurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelListingAPI.Data
 {
-    public class HotelListingDbConext : DbContext
+    public class HotelListingDbConext :  IdentityDbContext<ApiUser>
     {
         public HotelListingDbConext(DbContextOptions options) : base(options)
         {
@@ -15,56 +17,11 @@ namespace HotelListingAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Country>().HasData(
-                    new Country
-                    {
-                        Id = 1,
-                        Name = "Croatia",
-                        ShortName = "CRO"
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new CountryConfiguration());
+            modelBuilder.ApplyConfiguration(new HotelConfiguration());
 
-                    },
-                    new Country
-                    {
-                        Id = 2,
-                        Name = "Maldives",
-                        ShortName = "ML"
-
-                    },
-                    new Country
-                    {
-                        Id = 3,
-                        Name = "Spain",
-                        ShortName = "ES"
-
-                    }
-                );
-
-            modelBuilder.Entity<Hotel>().HasData(
-                    new Hotel
-                    {
-                        Id = 1,
-                        Name = "Sandals Resort and Spa",
-                        Address = "Zadar 14a",
-                        CountryId = 1,
-                        Rating = 4.5
-                    },
-                     new Hotel
-                     {
-                         Id = 2,
-                         Name = "Butch and Cassidy",
-                         Address = "Eiland 2 14a",
-                         CountryId = 2,
-                         Rating = 4.3
-                     },
-                      new Hotel
-                      {
-                          Id = 3,
-                          Name = "Resort and Spa",
-                          Address = "Barca 14a",
-                          CountryId = 3,
-                          Rating = 4.6
-                      }
-                );
+            modelBuilder.Entity<Hotel>();
         }
     }
 }
